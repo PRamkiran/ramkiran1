@@ -1,0 +1,309 @@
+SYSTEM CALLS
+
+
+
+7.Program to display process ids and group ids using fork system call.
+
+
+
+#include<stdio.h>
+#include<unistd.h>
+main()
+{
+int pid;
+pid=fork();
+pid=getpid();
+printf("\n child id=%d",pid);
+pid=getppid();
+printf("\n parent process id=%d",pid);
+pid=getuid();
+printf("\n user id=%d",pid);
+pid=getgid();
+printf("\n group id=%d",pid);
+}
+
+
+
+
+~
+"pidgid.c" 15L, 254C written
+[dmgv@LinuxServer ~]$ cc pidgid.c
+[dmgv@LinuxServer ~]$ ./a.out
+
+ child id=6810
+ parent process id=6809
+ user id=842
+ group id=842
+ child id=6809
+ parent process id=6104
+ user id=842
+ group id=842
+
+
+
+
+8.A program to implement fork system calls.
+
+
+
+include<stdio.h>
+#include<unistd.h>
+main(void)
+{
+int pid;
+pid=fork();
+if(pid>=0)
+{
+if(pid==0)
+{
+printf("\n Child process %d",pid);
+}
+else
+{
+printf("\n Parent process %d",pid);
+}
+}
+else
+printf("\n Process is not created");
+}
+~
+~
+~
+~
+"fork.c" 20L, 225C written
+[dmgv@LinuxServer ~]$ cc fork.c
+[dmgv@LinuxServer ~]$ ./a.out
+
+
+ Parent process 6848[dmgv@LinuxServer ~]$  Child process 0
+
+
+
+
+
+
+
+
+
+
+
+9.A program to implement vfork system calls
+
+
+
+
+#include<unistd.h>
+#include<stdio.h>
+int global=5;
+main()
+{
+int pid,local=6;
+pid=vfork();
+
+if(pid==0)
+{
+global++;
+local--;
+exit(0);
+}
+printf("\n %d %d",global,local);
+exit(0);
+}
+~
+~
+~
+~
+~
+~
+~
+"vfork.c" 17L, 178C written
+[dmgv@LinuxServer ~]$ cc vfork.c
+ [dmgv@LinuxServer ~]$ ./a.out
+
+ 6 5
+
+
+
+
+
+
+
+
+
+
+
+
+
+10.A program to implement fork and wait system calls
+
+
+
+
+#include<stdio.h>
+#include<unistd.h>
+main()
+{
+int pid,status,childpid;
+printf(" parent process with PID is %d \n ",getpid());
+pid=fork();
+if(pid!=0)
+{
+ sleep(1);
+ printf(" parent process with PID %d and PPID %d \n ",getpid(),getppid());
+ childpid=wait(&status);
+ printf("child process PID %d terminated with exit code %d\n",childpid,status>>8
+);
+}
+else
+{
+ printf(" child process with PID %d and PPId %d \n ",getpid(),getppid());
+ sleep(5);
+ exit(42);
+ }
+ printf("PID %d terminates \n ",getpid());
+}
+
+
+
+
+
+
+~
+"wait.c" 22L, 498C written
+[dmgv@LinuxServer ~]$ cc wait.c
+ [dmgv@LinuxServer ~]$ ./a.out
+ parent process with PID is 7242
+  child process with PID 7243 and PPId 7242
+  parent process with PID 7242 and PPID 6984
+  child process PID 7243 terminated with exit code 42
+PID 7242 terminates
+
+
+
+
+
+
+
+11.A program to implement fork and execvp system calls
+
+
+#include<stdio.h>
+main( int argc,char *argv[])
+{
+if(fork()==0)
+{
+execvp(argv[1],&argv[1]);
+fprintf(stderr,"couldnot execute %s \n",argv[1]);
+}
+}
+
+
+
+"ececvp.c" 9L, 145C written
+[dmgv@LinuxServer ~]$ cc ececvp.c
+[dmgv@LinuxServer ~]$ ./a.out wait.c
+#include<stdio.h>
+#include<unistd.h>
+main()
+{
+int pid,status,childpid;
+printf(" parent process with PID is %d \n ",getpid());
+pid=fork();
+if(pid!=0)
+{
+ sleep(1);
+ printf(" parent process with PID %d and PPID %d \n ",getpid(),getppid());
+ childpid=wait(&status);
+ printf("child process PID %d terminated with exit code %d\n",childpid,status>>8
+);
+}
+else
+{
+ printf(" child process with PID %d and PPId %d \n ",getpid(),getppid());
+ sleep(5);
+ exit(42);
+ }
+ printf("PID %d terminates \n ",getpid());
+}
+12.A  program to implement execl system call.
+
+
+
+#include<stdio.h>
+main()
+{
+printf("i am process %d and iam about exec an ls -1\n",getpid());
+execl("/bin/ls","ls","-1",NULL);
+printf("this line should never be executed\n");
+}
+
+
+
+
+
+~
+"excel.c" 9L, 178C written
+[dmgv@LinuxServer ~]$ cc excel.c
+ [dmgv@LinuxServer ~]$ ./a.out ls
+i am process 7189 and iam about exec an ls -1
+a.out
+armstrong.sh
+banker.c
+class
+d1
+d2
+datakey.c
+dirdetails.c
+dirsyscall.c
+ececvp.c
+enoent.c
+ENOENT.c
+err.c
+excel.c
+fcfs.c
+ff
+fib.sh
+fifo.c
+file3
+fileper.sh
+filetest
+fork.c
+func1.sh
+gcd.sh
+it
+lru.c
+memory.c
+memorynew.c
+nestfun.c
+nestfun.sh
+optimal.c
+palin.sh
+pidgid.c
+readwrite.c
+round.c
+sevendi.sh
+SJF.c
+stdit
+student
+vfork.c
+wait.c
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
